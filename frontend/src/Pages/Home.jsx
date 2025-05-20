@@ -42,11 +42,11 @@ const Home = () => {
   const { socket } = useContext(SocketContextData)
   
   useEffect(() => {
-    // if (!user) {
-    //   console.error('User is not defined');
-    //   navigate('/user-login'); // Redirect to login if user is not defined
-    //   return;
-    // }
+    if (!user) {
+      console.error('User is not defined');
+      navigate('/user-login'); // Redirect to login if user is not defined
+      return;
+    }
   
     socket.emit('join', {
       userId: user._id,
