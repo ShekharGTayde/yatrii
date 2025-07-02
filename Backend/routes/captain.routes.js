@@ -7,7 +7,7 @@ const captainRouter = express.Router()
 
 
 captainRouter.post('/register',registerCaptain)
-captainRouter.post('/login',loginCaptain)
+captainRouter.post('/login',authCaptain,loginCaptain)
 captainRouter.get('/logout',authCaptain,logoutCaptain)
 captainRouter.get('/profile',authCaptain,getCaptainProfile)
 
