@@ -8,7 +8,7 @@ import VehiclePanel from "../Components/VehiclePanel";
 import ConfirmRide from "../Components/ConfirmRidePanel";
 import LookingForDriver from "../Components/LookingForDriver";
 import WaitingForDriver from "../Components/WaitingForDriver";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { UserContextData } from "../Context/UserContext";
 import { SocketContextData } from "../Context/SocketContext";
@@ -40,19 +40,45 @@ const Home = () => {
 
   const { user } = useContext(UserContextData)
   const { socket } = useContext(SocketContextData)
-  
+
   useEffect(() => {
     if (!user) {
       console.error('User is not defined');
       navigate('/user-login'); // Redirect to login if user is not defined
       return;
     }
-  
+
     socket.emit('join', {
       userId: user._id,
       userType: 'user',
     });
-  }, [user]);
+
+  }, [user, socket, navigate]);
+
+  useEffect(() => {
+    if (!socket) {
+      console.error('socket is missing')
+    }
+    const handleRideConfirmed = ride => {
+      console.log("Ride confirmed:", ride);
+      setConfirmRidePanel(false);
+      setDriverFound(false);
+      setWaitingForDrivers(true);
+      setRide(ride);
+    };
+    socket.on('ride-confirmed', handleRideConfirmed);
+    return () => socket.off('ride-confirmed', handleRideConfirmed);
+  }, [socket])
+
+
+
+
+  socket.on('ride-started', ride => {
+    setWaitingForDrivers(false);
+    // console.log('data:',data);
+
+    navigate('/riding', { state: { ride } });
+  })
 
 
   const submitHandler = (e) => {
@@ -124,6 +150,8 @@ const Home = () => {
     }
   }
 
+
+
   useGSAP(() => {
     gsap.to(panelRef.current, {
       height: panelOpen ? "100%" : "36%",
@@ -160,6 +188,7 @@ const Home = () => {
     }
   }, [ConfirmRidePanel])
 
+
   useGSAP(() => {
     if (DriverFound) {
       gsap.to(DriverFoundeRef.current, {
@@ -174,22 +203,25 @@ const Home = () => {
 
 
   useGSAP(() => {
+    // console.log("WaitingForDrivers is:", WaitingForDrivers);
     if (WaitingForDrivers) {
       gsap.to(WaitingFordriversRef.current, {
         transform: "translateY(0)"
-      })
+      });
     } else {
       gsap.to(WaitingFordriversRef.current, {
         transform: "translateY(100%)"
-      })
+      });
     }
-  }, [WaitingForDrivers])
+  }, [WaitingForDrivers]);
+
 
 
   return (
     <div className="h-screen fixed overflow-hidden">
       {/* Logo */}
-      <img className="w-16 absolute left-5 top-5" src="/logo.png" alt="logo" />
+      <img className="w-40 absolute  top-2" src="./logo.png" alt="logo" />
+      
 
       {/* Map Background */}
       <div className="w-screen h-screen">
@@ -245,8 +277,6 @@ const Home = () => {
           </form>
 
 
-
-
           {/* location panel */}
           <div ref={panelRef} className='bg-white h-0 mt-5 ' >
             <LocationSearchPanel
@@ -294,8 +324,8 @@ const Home = () => {
               fare={fare}
               setDriverFound={setDriverFound}
               createRide={createRide}
-            // setConfirmRidePanel={setConfirmRidePanel} 
-            // setWaitingForDrivers={setWaitingForDrivers}
+              setConfirmRidePanel={setConfirmRidePanel}
+              setWaitingForDrivers={setWaitingForDrivers}
             />
           </div>
 
@@ -303,8 +333,8 @@ const Home = () => {
           <div ref={WaitingFordriversRef} className='fixed w-[100%]  bottom-0 translate-y-full bg-white p-5 pt-9 pb-5 ml-[-4%]'>
             <WaitingForDriver
               setWaitingForDrivers={setWaitingForDrivers}
-              WaitingForDrivers={WaitingForDrivers}
               ride={ride}
+              WaitingForDrivers={WaitingForDrivers}
               setDriverFound={setDriverFound}
             />
           </div>

@@ -7,7 +7,8 @@ const RidePopUp = (props) => {
 
   return (
     <div>
-       <h5 className='p-1 text-center w-[93%] absolute top-0' onClick={() => {
+       <h5 className='p-1 text-center w-[93%] absolute top-0' 
+            onClick={() => {
                 props.setRidePopUpPanel(false)
 
             }}><i className="text-3xl text-gray-200 ri-arrow-down-wide-line"></i></h5>
@@ -44,7 +45,7 @@ const RidePopUp = (props) => {
                             <p className='text-sm -mt-1 text-gray-600'>Cash</p>
                         </div>
                     </div>
-                    <button onClick={()=>{props.setConfirmRidePopUpPanel(true),props.setRidePopUpPanel(false)}} className='text-xl font-semibold p-2 bg-green-400 rounded-lg m-2 w-[92%]'>Accept</button>
+                    <button onClick={()=>{props.setConfirmRidePopUpPanel(true),props.setRidePopUpPanel(false), props.confirmRide();}} className='text-xl font-semibold p-2 bg-green-400 rounded-lg m-2 w-[92%]'>Accept</button>
                     <button onClick={()=>{props.setRidePopUpPanel(false)}} className='text-xl font-semibold p-2 bg-gray-200 text-gray-600 rounded-lg m-2 w-[92%]'>Ignore</button>
                 </div>
             </div>

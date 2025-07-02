@@ -32,7 +32,7 @@ const {captain,setCaptain} = useContext(CaptainContextData)
   return (
     <div className='bg-white p-7 h-screen flex flex-col justify-between'>
       <div>
-        <img className='w-20 ml-2 mb-8' src="./uber-driver.svg" alt="logo" />
+        <img className='w-40 -ml-6 mb-4' src="./driver-logo.png" alt="logo" />
         <form onSubmit={submitHandler}>
           <div className='bg-white '>
 

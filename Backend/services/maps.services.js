@@ -16,7 +16,7 @@ export const getAddressCoordinates = async (address) => {
         if (response.status === 200 && response.data.results.length > 0) {
             const location = response.data.results[0].geometry.location;
             return {
-                lat: location.lat, // Fixed typo from `ltd` to `lat`
+                ltd: location.lat, 
                 lng: location.lng,
             };
         } else {

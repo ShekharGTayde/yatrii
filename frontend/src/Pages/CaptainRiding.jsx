@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import FinishRide from '../Components/FinishRide'
 import { useGSAP } from '@gsap/react'
@@ -9,10 +9,20 @@ import gsap from 'gsap'
 const CaptainRiding = () => {
 
   const [FinishRidePanel, setFinishRidePanel] = useState(false)
+  const [ride,setRide] = useState(null)
+
   const FinishRidePanelRef = useRef(null)
-  const location = useLocation()
   
-  const rideData = location.state?.ride
+  const location = useLocation()
+
+  useEffect(()=>{
+
+    const rideData = location.state?.ride
+    setRide(rideData)
+    // console.log('rideData:',ride);
+  },[ride])
+  
+  
 
 
   useGSAP(() => {
@@ -30,7 +40,7 @@ const CaptainRiding = () => {
   return (
     <div className='h-screen fixed'>
       <div className='flex justify-between items-center '>
-        <img className='w-16 absolute left-5 top-5' src="./uber-driver.svg" alt="logo" />
+        <img className='w-40 absolute  top-2' src="./driver-logo.png" alt="logo" />
         <div>
           <Link to='/captain-home' className='fixed h-18 w-18 bg-white rounded-full text-2xl p-2 font-medium flex justify-center items-center right-2 top-2'>
             <i className="ri-logout-box-r-line"></i>
@@ -53,7 +63,10 @@ const CaptainRiding = () => {
       <div ref={FinishRidePanelRef}
         className='fixed w-[100%] translate-y-full bottom-0  bg-white p-5 pt-9 pb-5 '>
         <FinishRide
-          setFinishRidePanel={setFinishRidePanel} />
+          setFinishRidePanel={setFinishRidePanel}
+          ride={ride}
+          setRide={setRide} 
+          />
       </div>
     
     </div>

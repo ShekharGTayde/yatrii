@@ -30,7 +30,6 @@ rideRouter.post('/confirm',
 )
 
 rideRouter.get('/start-ride',
-    authCaptain,
     query('rideId').isMongoId().withMessage('Invalid ride id'),
     query('otp').isString().isLength({ min: 6, max: 6 }).withMessage('Invalid OTP'),
     StartRide

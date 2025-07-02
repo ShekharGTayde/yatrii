@@ -5,19 +5,22 @@ import RidePopUp from '../Components/RidePopUp'
 import { useGSAP } from '@gsap/react'
 import gsap from "gsap";
 import ConfirmRidePopUp from '../Components/ConfirmRidePopUp'
-import { CaptainContextData } from '../Context/CaptainContext'
 import { SocketContextData } from '../Context/SocketContext'
+import axios from 'axios'
+import FinishRide from '../Components/FinishRide'
 
 const CaptainHome = () => {
 
 
-    const [RidePopUpPanel, setRidePopUpPanel] = useState(true)
+    const [RidePopUpPanel, setRidePopUpPanel] = useState(false)
     const [ConfirmRidePopUpPanel, setConfirmRidePopUpPanel] = useState(false)
     const [ride, setRide] = useState(null)
+ 
 
     const RidePopUpPanelRef = useRef(null)
     const ConfirmRidePopUpPanelRef = useRef(null)
     const CaptainDetailsPanelRef = useRef(null)
+    const FinishRidePanelRef = useRef(null)
 
    
     const captain =  JSON.parse(  localStorage.getItem('captain'));
@@ -28,8 +31,33 @@ const CaptainHome = () => {
             userId:captain?._id,
             userType:'captain'
         })
-    },[captain])
 
+              const updateLocation = () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+
+                    socket.emit('update-location-captain', {
+                        userId: captain._id,
+                        location: {
+                            ltd: position.coords.latitude,
+                            lng: position.coords.longitude
+                        }
+                    })
+                })
+            }
+        }
+
+        const locationInterval = setInterval(updateLocation, 10000)
+        updateLocation()
+        //  return () => clearInterval(locationInterval)
+    },[captain])
+   
+    socket.on('new-ride',(data)=>{
+        setRide(data)
+        setRidePopUpPanel(true)
+        setConfirmRidePopUpPanel(false)
+        console.log("new ride",data);
+    })
 
     async function confirmRide() {
 
@@ -41,6 +69,9 @@ const CaptainHome = () => {
         setConfirmRidePopUpPanel(true)
 
     }
+
+   
+   
 
     useGSAP(() => {
         if (RidePopUpPanel) {
@@ -69,7 +100,7 @@ const CaptainHome = () => {
     return (
         <div className='h-screen fixed'>
             <div className='flex justify-between items-center '>
-                <img className='w-16 absolute left-5 top-5' src="./uber-driver.svg" alt="logo" />
+                <img className='w-40 absolute  top-2' src="./driver-logo.png" alt="logo" />
                 <div>
                     <Link to='/captain-login' className='fixed h-18 w-18 bg-white rounded-full text-2xl p-2 font-medium flex justify-center items-center right-2 top-2'>
                         <i className="ri-logout-box-r-line"></i>
@@ -94,8 +125,14 @@ const CaptainHome = () => {
                 <ConfirmRidePopUp
                     ride={ride}
                     setConfirmRidePopUpPanel={setConfirmRidePopUpPanel}
-                    setRidePopUpPanel={setRidePopUpPanel} />
+                    setRidePopUpPanel={setRidePopUpPanel} 
+                    
+                    />
             </div>
+           
+            
+      
+
         </div>
     )
 }

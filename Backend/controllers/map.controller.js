@@ -1,3 +1,4 @@
+import Captain from "../models/captain.model.js";
 import { getAddressCoordinates, getAutoCompleteSuggestions, getDistanceTime } from "../services/maps.services.js";
 import apiError from "../utils/apiError.js";
 import apiResponse from "../utils/apiResponse.js";
@@ -20,7 +21,7 @@ export const getCoordinates = async (req, res, next) => {
                 new apiResponse(200, coordinates, 'coordinates fetched successfully')
             );
     } catch (error) {
-        next(new apiError(500, "Internal server error occurred"));
+     throw  new apiError(500, "Internal server error occurred");
     }
 };
 
@@ -52,7 +53,7 @@ export const getSuggestions = async (req, res, next) => {
 
     try {
 
-        const { input } = req.query;
+        const input = req.query.input || req.body.input;
 
         const suggestions = await getAutoCompleteSuggestions(input);
 
@@ -62,3 +63,4 @@ export const getSuggestions = async (req, res, next) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 }
+

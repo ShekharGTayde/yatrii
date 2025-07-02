@@ -3,7 +3,8 @@ import {io} from 'socket.io-client'
 
 export const SocketContextData = createContext()
 
-const socket = io(import.meta.env.VITE_BASE_URL, {
+// Initialize the socket connection using the base URL from environment variables
+const socket = io(`http://localhost:8000`, {
     transports: ['websocket', 'polling'], // Ensure compatibility
   });
 
@@ -19,10 +20,11 @@ const SocketContext = ({children}) => {
             
         })
     },[])
-
+ 
+    
   return (
     <div>
-      <SocketContextData.Provider value={{socket}}>
+      <SocketContextData.Provider value={{ socket}}>
         {children}
       </SocketContextData.Provider>
     </div>

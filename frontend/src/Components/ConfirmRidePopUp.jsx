@@ -1,27 +1,36 @@
+import axios from 'axios'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+
 
 const ConfirmRidePopUp =  (props) => {
 
     const [otp, setOtp] = useState('')
     const navigate = useNavigate()
 
-    const submitHandler =  async() => {
-        e.preventDefault()
+    const submitHandler =  async(e) => {
+       try {
+         e.preventDefault()
+ 
+         const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/start-ride`, {
+             params: {
+                 rideId: props.ride._id,
+                 otp: otp
+             }
+             
+         },{withCredentials:true})
 
-        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/start-ride`, {
-            params: {
-                rideId: props.ride._id,
-                otp: otp
-            }
-            
-        },{withCredentials:true})
-
-        if (response.status === 200) {
-            props.setConfirmRidePopupPanel(false)
-            props.setRidePopupPanel(false)
-            navigate('/captain-riding', { state: { ride: props.ride } })
-        }
+        //  console.log('response:',response);
+         
+ 
+         if (response.status === 200) {
+             props.setConfirmRidePopUpPanel(false)
+             props.setRidePopUpPanel(false)
+             navigate('/captain-riding', { state: { ride: props.ride } })
+         }
+       } catch (error) {
+        console.error(error)
+       }
     }
 
     return (
@@ -66,8 +75,8 @@ const ConfirmRidePopUp =  (props) => {
                     <div className='flex flex-col w-full'>
                         <form onSubmit={ submitHandler } className='w-full'>
                             <input value={otp} onChange={(e) => { setOtp(e.target.value) }} type="number" placeholder='Enter OTP' className='flex border-2 justify-center text-xl bg-gray-100 items-center font-semibold p-2 rounded-lg m-2 w-[92%]' />
-                            <button to='/captain-riding' className='flex justify-center text-xl font-semibold p-2 bg-green-400 rounded-lg m-2 w-[92%]'>Confirm </button>
-                            <button onClick={() => { props.setConfirmRidePopUpPanel(false), props.setRidePopUpPanel(false) }} className='flex justify-center text-xl font-semibold p-2 bg-red-400 rounded-lg m-2 w-[92%]'>Cancel </button>
+                            <button  className='flex justify-center text-xl font-semibold p-2 bg-green-400 rounded-lg m-2 w-[92%]'>Confirm </button>
+                            <button type='button' onClick={() => { props.setConfirmRidePopUpPanel(false), props.setRidePopUpPanel(false) }} className='flex justify-center text-xl font-semibold p-2 bg-red-400 rounded-lg m-2 w-[92%]'>Cancel </button>
                         </form>
                     </div>
 

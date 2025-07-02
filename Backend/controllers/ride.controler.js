@@ -4,6 +4,10 @@ import {getFare} from "../services/ride.services.js"
 import {confirmRide} from "../services/ride.services.js"
 import {startRide} from "../services/ride.services.js"
 import {endRide} from "../services/ride.services.js"
+import { sendMessageToSocketId } from "../socket.js";
+import Ride from "../models/ride.model.js";
+import { getAddressCoordinates, getCaptainsInTheRadius } from "../services/maps.services.js";
+import User from "../models/user.model.js";
 
 
 export const createRides = async(req,res,next) => {
@@ -14,10 +18,31 @@ export const createRides = async(req,res,next) => {
     }
     try {
         const ride = await createRide({user:req.user._id,pickup,destination,vehicleType})
-        return res
-        .json(
+         res.json(
             new apiResponse(200,ride,'ride created successully')
         )
+         const pickupCoordinates = await getAddressCoordinates(pickup);
+
+        // console.log("Pickup Coordinates:", pickupCoordinates);
+        
+
+        const captainsInRadius = await getCaptainsInTheRadius(pickupCoordinates.ltd, pickupCoordinates.lng, 20);
+    //    console.log("Captains in radius:", captainsInRadius);
+       
+        ride.otp = ""
+
+        const rideWithUser = await Ride.findOne({ _id: ride._id }).populate('user');
+
+        captainsInRadius.map(captain => {
+
+            sendMessageToSocketId(captain.socketId, {
+                event: 'new-ride',
+                data: rideWithUser
+            })
+
+
+        })
+        
     } catch (error) {
         console.error('internal server error while creating ride')
         next(error)
@@ -49,13 +74,16 @@ export const ConfirmRide = async (req, res) => {
     const { rideId } = req.body;
 
     try {
-        const ride = await confirmRide({ rideId, captain: req.captain });
+        const ride = await confirmRide({ rideId, captain: req.captain ,user:req.user});
+        const user = await User.findById(ride.user._id); // Always fetch fresh
+        
+         
 
-        sendMessageToSocketId(ride.user.socketId, {
-            event: 'ride-confirmed',
-            data: ride
+        sendMessageToSocketId(user.socketId,{
+            event:"ride-confirmed",
+            data:ride
         })
-
+        
         return res.status(200).json(ride);
     } catch (err) {
 
@@ -105,3 +133,4 @@ export const EndRide = async (req, res) => {
         return res.status(500).json({ message: err.message });
     } s
 }
+
