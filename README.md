@@ -47,7 +47,7 @@ Yatri/
 | Method | Endpoint                | Description                       | Auth         |
 |--------|-------------------------|-----------------------------------|--------------|
 | POST   | `/register`             | Register a new user               | No           |
-| POST   | `/login`                | Login user                        | No           |
+| POST   | `/login`                | Login user                        | Yes           |
 | GET    | `/logout`               | Logout user                       | Yes          |
 | GET    | `/regeneratedToken`     | Regenerate JWT token              | Yes          |
 | GET    | `/profile`              | Get user profile                  | Yes          |
@@ -58,7 +58,7 @@ Yatri/
 | Method | Endpoint                | Description                       | Auth         |
 |--------|-------------------------|-----------------------------------|--------------|
 | POST   | `/register`             | Register a new captain            | No           |
-| POST   | `/login`                | Login captain                     | No           |
+| POST   | `/login`                | Login captain                     | Yes          |
 | GET    | `/logout`               | Logout captain                    | Yes          |
 | GET    | `/profile`              | Get captain profile               | Yes          |
 
