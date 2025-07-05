@@ -4,7 +4,7 @@ import {io} from 'socket.io-client'
 export const SocketContextData = createContext()
 
 // Initialize the socket connection using the base URL from environment variables
-const socket = io(`http://localhost:8000`, {
+const socket = io(`https://yatrii-2.onrender.com`, {
     transports: ['websocket', 'polling'], // Ensure compatibility
   });
 
