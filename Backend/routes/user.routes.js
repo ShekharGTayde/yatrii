@@ -9,7 +9,7 @@ const userRouter = express.Router()
 
 
 userRouter.post("/register", registerUser);
-userRouter.post("/login",authUser,loginUser);
+userRouter.post("/login",loginUser);
 userRouter.get("/logout",authUser,logoutUser)
 userRouter.get("/regeneratedToken",authUser,regenerateToken)
 userRouter.get("/profile",authUser,getUserProfile)

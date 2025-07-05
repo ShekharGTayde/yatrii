@@ -10,9 +10,10 @@ import Order from './models/order.model.js';
 
 
 const app = express()
+
 app.use(cors({
-      origin: '*',
-      credentials: true // Allow cookies
+    origin:process.env.CLIENT_URL,
+    credentials: true // Allow cookies
   }));
 app.use(express.json())
 app.use(cookieParser())
