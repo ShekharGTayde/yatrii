@@ -23,7 +23,7 @@ export const getAddressCoordinates = async (address) => {
             throw new apiError(400, "Failed to retrieve location from Maps API");
         }
     } catch (err) {
-        console.error("Error fetching coordinates:", err);
+        // console.error("Error fetching coordinates:", err);
         throw new apiError(500, "Internal server error while fetching coordinates");
     }
 };
@@ -56,7 +56,7 @@ export const getDistanceTime = async (origin, destination) => {
         };
 
     } catch (error) {
-        console.error("Error fetching distance:", error);
+        // console.error("Error fetching distance:", error);
         throw new apiError(500, "Something went wrong while fetching distance");
     }
 };
@@ -80,11 +80,11 @@ export const getAutoCompleteSuggestions = async (input) => {
         if (response.data.status === "OK") {
             return response.data.predictions.map(prediction => prediction.description);
         } else {
-            console.error("Google Maps API Error Response:", response.data);
+            // console.error("Google Maps API Error Response:", response.data);
             throw new apiError(500, `Google Maps API Error: ${response.data.status}`);
         }
     } catch (error) {
-        console.error("Google Maps API Error:", error.response?.data || error.message);
+        // console.error("Google Maps API Error:", error.response?.data || error.message);
         throw new apiError(500, "Failed to fetch autocomplete suggestions");
     }
 };

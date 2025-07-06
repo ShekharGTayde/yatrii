@@ -150,7 +150,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 
       // If not, insert the token into the blacklist
       await BlacklistToken.create({ token });
-      console.log("Token blacklisted successfully");
+      // console.log("Token blacklisted successfully");
  
      
   } catch (error) {

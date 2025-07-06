@@ -9,7 +9,7 @@ export const getFare = async (pickup, destination) => {
     }
 
     const distanceTime = await getDistanceTime(pickup, destination);
-    console.log("Raw Distance & Duration:", distanceTime);
+    // console.log("Raw Distance & Duration:", distanceTime);
 
     if (!distanceTime || !distanceTime.distance || !distanceTime.duration) {
         throw new apiError(500, "Failed to get distance and duration");
@@ -30,8 +30,8 @@ export const getFare = async (pickup, destination) => {
         });
     }
 
-    console.log(`Parsed Distance: ${distanceInMeters} meters`);
-    console.log(`Parsed Duration: ${durationInMinutes} minutes`);
+    // console.log(`Parsed Distance: ${distanceInMeters} meters`);
+    // console.log(`Parsed Duration: ${durationInMinutes} minutes`);
 
     const baseFare = { auto: 30, car: 50, bike: 20 };
     const perKmRate = { auto: 10, car: 15, bike: 8 };
@@ -43,7 +43,7 @@ export const getFare = async (pickup, destination) => {
         bike: Math.round(baseFare.bike + (distanceInMeters / 1000) * perKmRate.bike + durationInMinutes * perMinRate.bike)
     };
 
-    console.log("Calculated Fare:", fare);
+    // console.log("Calculated Fare:", fare);
     return fare;
 };
 
@@ -60,7 +60,7 @@ export const createRide = async ({ user, pickup, destination, vehicleType }) => 
         throw new apiError(400, "All fields are required");
     }
 
-    console.log("Received Vehicle Type:", vehicleType);
+    // console.log("Received Vehicle Type:", vehicleType);
     
     const fare = await getFare(pickup,destination);
 
@@ -68,7 +68,7 @@ export const createRide = async ({ user, pickup, destination, vehicleType }) => 
         throw new apiError(400, `Invalid vehicle type: ${vehicleType}`);
     }
 
-    console.log("Fare for selected vehicle:", fare[vehicleType]);
+    // console.log("Fare for selected vehicle:", fare[vehicleType]);
 
     const ride = await Ride.create({
         user,

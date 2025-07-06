@@ -55,8 +55,8 @@ const receiptId = `receipt_${Date.now()}_${Math.random().toString(36).substring(
       },
     });
     const order = await response.json();
-    console.log(order);
-    console.log('keys:',import.meta.env.VITE_RAZORPAY_KEY_ID );
+    // console.log(order);
+    // console.log('keys:',import.meta.env.VITE_RAZORPAY_KEY_ID );
     
     var options = {
       key: import.meta.env.VITE_RAZORPAY_KEY_ID, 
@@ -82,7 +82,7 @@ const receiptId = `receipt_${Date.now()}_${Math.random().toString(36).substring(
           }
         );
         const jsonRes = await validateRes.json();
-        console.log(jsonRes);
+        // console.log(jsonRes);
       },
       prefill: {
         //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number

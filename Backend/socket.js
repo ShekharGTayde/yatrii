@@ -14,7 +14,7 @@ function IniatiazedSocket(server) {
     })
 
     io.on('connection', (socket) => {
-        console.log(`client connected:${socket.id}`)
+        // console.log(`client connected:${socket.id}`)
 
         
         
@@ -25,7 +25,7 @@ function IniatiazedSocket(server) {
                 console.error('Invalid join data:', data);
                 return;
             }
-            console.log(`User ${userId} joined as ${userType}`);
+            // console.log(`User ${userId} joined as ${userType}`);
 
             if (userType === 'user') {
                 await User.findByIdAndUpdate(userId, { socketId: socket.id })
@@ -60,7 +60,7 @@ function IniatiazedSocket(server) {
 
 export const sendMessageToSocketId = (socketId, messageObject) => {
 
-    console.log(messageObject);
+    // console.log(messageObject);
     
         if (io) {
             io.to(socketId).emit(messageObject.event, messageObject.data);

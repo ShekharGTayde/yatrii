@@ -63,7 +63,7 @@ export const Fare = async (req, res, next) => {
             new apiResponse(200, fare, "Fare calculated successfully")
         );
     } catch (error) {
-        console.error("Error in Fare function:", error);
+        // console.error("Error in Fare function:", error);
         return res.status(500).json({ success: false, message: "Internal server error" });
     }
 };
@@ -87,7 +87,7 @@ export const ConfirmRide = async (req, res) => {
         return res.status(200).json(ride);
     } catch (err) {
 
-        console.log(err);
+        // console.log(err);
         return res.status(500).json({ message: err.message });
     }
 }
@@ -100,7 +100,7 @@ export const StartRide = async (req, res) => {
     try {
         const ride = await startRide({ rideId, otp, captain: req.captain });
 
-        console.log(ride);
+        // console.log(ride);
 
         sendMessageToSocketId(ride.user.socketId, {
             event: 'ride-started',
