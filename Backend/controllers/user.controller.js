@@ -109,8 +109,8 @@ const loginUser = asyncHandler(async (req, res, next) => {
 
    const options = {
       httpOnly: true, // Prevents JavaScript access (protects from XSS)
-      secure: process.env.NODE_ENV, // Works only on HTTPS in production
-      sameSite: "Strict", // Prevents CSRF attacks
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       path: "/", // Ensures the cookie is accessible on all routes
    };
 
@@ -135,7 +135,12 @@ const loginUser = asyncHandler(async (req, res, next) => {
 //logout a user
 const logoutUser = asyncHandler(async (req, res) => {
   try {
-    res.clearCookie('token', { httpOnly: true, secure: true, sameSite: "None" })
+      res.clearCookie('token', {
+         httpOnly: true,
+         secure: process.env.NODE_ENV === "production",
+         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+         path: "/"
+      })
     const token = req.cookies?.token || req.headers.authorization?.split(" ")[1]
     if (!token) {
        return res.status(400).json({ message: "Token is required for logout" });

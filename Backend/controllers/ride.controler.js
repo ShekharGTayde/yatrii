@@ -63,8 +63,8 @@ export const Fare = async (req, res, next) => {
             new apiResponse(200, fare, "Fare calculated successfully")
         );
     } catch (error) {
-        // console.error("Error in Fare function:", error);
-        return res.status(500).json({ success: false, message: "Internal server error" });
+        const statusCode = error.statusCode || 500;
+        return res.status(statusCode).json({ success: false, message: error.message || "Internal server error" });
     }
 };
 

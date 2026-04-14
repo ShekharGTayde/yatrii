@@ -8,7 +8,7 @@ import apiResponse from "../utils/apiResponse.js";
 
 export const getCoordinates = async (req, res, next) => {
     try {
-        const { address } = req.body;
+        const address = req.query.address || req.body.address;
 
         if (!address) {
             return next(new apiError(400, "Address is required")); // Fix status code
@@ -27,7 +27,8 @@ export const getCoordinates = async (req, res, next) => {
 
 export const getDistTime = async (req, res, next) => {
     try {
-        const { origin, destination } = req.body
+        const origin = req.query.origin || req.body.origin;
+        const destination = req.query.destination || req.body.destination;
         if (!origin || !destination) {
             return res.status(400).json({
                 success: false,
@@ -59,8 +60,8 @@ export const getSuggestions = async (req, res, next) => {
 
         res.status(200).json(suggestions);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Internal server error' });
+        const statusCode = err.statusCode || 500;
+        res.status(statusCode).json({ message: err.message || 'Internal server error' });
     }
 }
 

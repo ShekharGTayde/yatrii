@@ -1,13 +1,13 @@
-const asyncHandler =  (func) => async (req,res,next) =>{
+const asyncHandler = (func) => async (req, res, next) => {
     try {
-        return func(req,res,next)
+        return await func(req, res, next);
     } catch (error) {
-        res.status(error.code || 500).json({
-            success:false,
-            message:error.message
-        })
+        return res.status(error.statusCode || 500).json({
+            success: false,
+            message: error.message || 'Internal server error'
+        });
     }
-}
+};
 
 
 export default asyncHandler

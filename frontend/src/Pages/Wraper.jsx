@@ -52,7 +52,7 @@ const CaptainWraper = ({ children }) => {
             .then(response => {
                 if (response.status === 200) {
                     const data = response.data.data
-                    setCaptain(data.captain)
+                    setCaptain(data?.captain || data)
                     setIsLoading(false);
                 }
             })

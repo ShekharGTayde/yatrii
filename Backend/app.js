@@ -11,10 +11,27 @@ import Order from './models/order.model.js';
 
 const app = express()
 
+const allowedOrigins = (process.env.CLIENT_URL || '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 app.use(cors({
-    origin:process.env.CLIENT_URL,
+    origin: (origin, callback) => {
+      // Allow non-browser clients and same-origin requests without an Origin header.
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error('Not allowed by CORS'));
+    },
     credentials: true // Allow cookies
   }));
+app.options('*', cors());
 app.use(express.json())
 app.use(cookieParser())
 

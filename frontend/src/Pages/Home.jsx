@@ -89,6 +89,10 @@ const Home = () => {
   const handelPickupChange = async (e) => {
     const userInput = e.target.value;
     setPickup(userInput);
+    if (!userInput || userInput.trim().length < 2) {
+      setPickupSuggestion([]);
+      return;
+    }
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`,
@@ -108,6 +112,10 @@ const Home = () => {
   const handelDestinationChange = async (e) => {
     const userInput = e.target.value
     setDestination(userInput)
+    if (!userInput || userInput.trim().length < 2) {
+      setDestinationSuggestion([])
+      return
+    }
     try {
       const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`,
         {

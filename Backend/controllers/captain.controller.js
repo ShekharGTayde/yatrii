@@ -86,7 +86,8 @@ const loginCaptain = asyncHandler(async(req,res,next)=>{
     const options = {
         httpOnly: true, // Prevent access from JavaScript
         secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-        sameSite: "None", // Allow cookies across different origins
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        path: "/"
     };
      
     //send res
@@ -106,7 +107,12 @@ const logoutCaptain = asyncHandler(async(req,res,next)=>{
         throw new apiError(401,'token is required')
     }
     await BlacklistToken.create({token})
-    res.clearCookie('token')
+    res.clearCookie('token', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        path: "/"
+    })
 
 
     //send res
