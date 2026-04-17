@@ -8,6 +8,14 @@ import {getUserProfile, loginUser, logoutUser, regenerateToken, registerUser} fr
 const userRouter = express.Router()
 
 
+userRouter.get("/", (req, res) => {
+	res.status(200).json({
+		success: true,
+		message: "Users API is working",
+	});
+});
+
+
 userRouter.post("/register", registerUser);
 userRouter.post("/login",loginUser);
 userRouter.get("/logout",authUser,logoutUser)
