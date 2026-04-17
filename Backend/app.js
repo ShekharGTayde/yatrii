@@ -73,7 +73,9 @@ import captainRouter from "./routes/captain.routes.js";
 import Maprouter from "./routes/maps.routes.js";
 import rideRouter from "./routes/ride.routes.js";
 
-
+app.get("/", (req, res) => {
+  res.send("Yatrii API is running 🚀");
+});
 //config  all routes
 app.use('/api/v1/users',userRouter)
 app.use('/api/v1/captains',captainRouter)
