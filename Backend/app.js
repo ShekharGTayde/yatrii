@@ -13,25 +13,29 @@ const app = express()
 
 const allowedOrigins = (process.env.CLIENT_URL || '')
   .split(',')
-  .map((origin) => origin.trim())
+  .map((origin) => origin.trim().replace(/\/+$/, ''))
   .filter(Boolean);
 
-app.use(cors({
-    origin: (origin, callback) => {
-      // Allow non-browser clients and same-origin requests without an Origin header.
-      if (!origin) {
-        return callback(null, true);
-      }
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow non-browser clients and same-origin requests without an Origin header.
+    if (!origin) {
+      return callback(null, true);
+    }
 
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
+    const normalizedOrigin = origin.replace(/\/+$/, '');
 
-      return callback(new Error('Not allowed by CORS'));
-    },
-    credentials: true // Allow cookies
-  }));
-app.options('*', cors());
+    if (allowedOrigins.length === 0 || allowedOrigins.includes(normalizedOrigin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(express.json())
 app.use(cookieParser())
 

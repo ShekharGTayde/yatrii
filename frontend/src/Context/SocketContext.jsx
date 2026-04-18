@@ -1,14 +1,11 @@
 import React, { createContext, useEffect } from 'react'
 import {io} from 'socket.io-client'
+import { SOCKET_SERVER_URL } from '../utils/apiConfig'
 
 export const SocketContextData = createContext()
 
-const apiBaseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:3000/api/v1';
-const socketServerUrl = import.meta.env.VITE_SOCKET_URL || apiBaseUrl.replace(/\/api\/v1\/?$/, '');
-
-// Use the backend origin for Socket.IO instead of a hardcoded port.
-const socket = io(socketServerUrl, {
-  transports: ['websocket', 'polling'],
+const socket = io(SOCKET_SERVER_URL, {
+  withCredentials: true,
 });
 
 const SocketContext = ({children}) => {

@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { SocketContextData } from '../Context/SocketContext'
 import axios from 'axios'
+import { buildApiUrl } from '../utils/apiConfig'
 
 
 
@@ -43,7 +44,7 @@ const receiptId = `receipt_${Date.now()}_${Math.random().toString(36).substring(
     alert("Razorpay SDK failed to load. Are you online?");
     return;
   }
-    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/order`, {
+    const response = await fetch(buildApiUrl('/order'), {
       method: "POST",
       body: JSON.stringify({
         amount,
@@ -72,7 +73,7 @@ const receiptId = `receipt_${Date.now()}_${Math.random().toString(36).substring(
         };
 
         const validateRes = await fetch(
-          `${import.meta.env.VITE_BASE_URL}/order/validate`,
+          buildApiUrl('/order/validate'),
           {
             method: "POST",
             body: JSON.stringify(body),

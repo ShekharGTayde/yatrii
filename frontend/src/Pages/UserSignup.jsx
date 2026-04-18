@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { UserContextData } from '../Context/UserContext'
 import axios from 'axios'
+import { buildApiUrl } from '../utils/apiConfig'
 
 
 const UserSignup = () => {
@@ -24,7 +25,7 @@ const UserSignup = () => {
 
     try {
 
-      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`, userData, { withCredentials: true })
+      const response = await axios.post(buildApiUrl('/users/register'), userData, { withCredentials: true })
       if (response.status === 200) {
         const data = response.data.data
         // console.log(data.user);

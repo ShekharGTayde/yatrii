@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { buildApiUrl } from '../utils/apiConfig'
 
 
 const ConfirmRidePopUp =  (props) => {
@@ -12,7 +13,7 @@ const ConfirmRidePopUp =  (props) => {
        try {
          e.preventDefault()
  
-         const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/start-ride`, {
+         const response = await axios.get(buildApiUrl('/rides/start-ride'), {
              params: {
                  rideId: props.ride._id,
                  otp: otp

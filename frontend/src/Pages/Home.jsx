@@ -12,6 +12,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { UserContextData } from "../Context/UserContext";
 import { SocketContextData } from "../Context/SocketContext";
+import { buildApiUrl } from '../utils/apiConfig'
 
 const Home = () => {
   const [pickup, setPickup] = useState("");
@@ -95,7 +96,7 @@ const Home = () => {
     }
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`,
+        buildApiUrl('/maps/get-suggestions'),
         {
           params: { input: userInput }, // Fix: Pass user input correctly
           withCredentials: true,
@@ -117,7 +118,7 @@ const Home = () => {
       return
     }
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`,
+      const response = await axios.get(buildApiUrl('/maps/get-suggestions'),
         {
           params: { input: userInput },
           withCredentials: true,
@@ -137,7 +138,7 @@ const Home = () => {
   const findTrip = async () => {
     setVehiclesPanel(true)
     setPanelOpen(false)
-    const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
+    const response = await axios.get(buildApiUrl('/rides/get-fare'), {
       params: { pickup, destination },
       withCredentials: true
     })
@@ -147,7 +148,7 @@ const Home = () => {
 
   const createRide = async () => {
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/create`, {
+      const response = await axios.post(buildApiUrl('/rides/create'), {
         pickup,
         destination,
         vehicleType

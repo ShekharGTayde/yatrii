@@ -2,12 +2,13 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import apiError from '../../../Backend/utils/apiError'
+import { buildApiUrl } from '../utils/apiConfig'
 
 
 const UserLogout = async() => {
     const navigate = useNavigate()
    try {
-   const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/users/logout`,{withCredentials:true})
+    const response = await axios.get(buildApiUrl('/users/logout'),{withCredentials:true})
    if (response.status===200) {
     navigate(`/user-login`)
    }

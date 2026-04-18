@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { UserContextData } from '../Context/UserContext'
 import axios from 'axios'
 import apiError from '../../../Backend/utils/apiError'
+import { buildApiUrl } from '../utils/apiConfig'
 
 const UserLogin = () => {
 
@@ -24,7 +25,7 @@ const UserLogin = () => {
 
   //always use cookies for storing jwt tokens
   try {
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`,
+    const response = await axios.post(buildApiUrl('/users/login'),
       userData,
       {withCredentials:true})
 

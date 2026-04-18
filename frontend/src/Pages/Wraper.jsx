@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
  import { UserContextData } from '../Context/UserContext.jsx';
  import { CaptainContextData } from '../Context/CaptainContext.jsx';
+ import { buildApiUrl } from '../utils/apiConfig'
 
 const UserWraper = ({ children }) => {
     const navigate = useNavigate();
@@ -12,7 +13,7 @@ const UserWraper = ({ children }) => {
     useEffect(() => {
       
 
-          axios.get(`${import.meta.env.VITE_BASE_URL}/users/profile`, {
+          axios.get(buildApiUrl('/users/profile'), {
             withCredentials: true, // Ensure cookies are sent with the request
            
         })
@@ -45,7 +46,7 @@ const CaptainWraper = ({ children }) => {
     useEffect(() => {
       
 
-        axios.get(`${import.meta.env.VITE_BASE_URL}/captains/profile`, {
+        axios.get(buildApiUrl('/captains/profile'), {
             withCredentials: true, // Ensure cookies are sent with the request
            
         })

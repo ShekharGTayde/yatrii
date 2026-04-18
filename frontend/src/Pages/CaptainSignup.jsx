@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { CaptainContextData } from '../Context/CaptainContext'
+import { buildApiUrl } from '../utils/apiConfig'
 
 const CaptainSignup = () => {
 
@@ -39,7 +40,7 @@ const CaptainSignup = () => {
     }
     
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, captainData, { withCredentials: true });
+      const response = await axios.post(buildApiUrl('/captains/register'), captainData, { withCredentials: true });
       // console.log('API Response:', response.data); // Log the API response
       if (response.status === 200) {
         const data = response.data.data;

@@ -6,10 +6,28 @@ import Captain from './models/captain.model.js'
 let io;
 
 function IniatiazedSocket(server) {
+    const allowedOrigins = (process.env.CLIENT_URL || '')
+        .split(',')
+        .map((origin) => origin.trim().replace(/\/+$/, ''))
+        .filter(Boolean);
+
     io = new socketIo(server, {
         cors: {
-            origin:`${process.env.CLIENT_URL}`,
-            methods: ['GET', 'POST']
+            origin: (origin, callback) => {
+                if (!origin) {
+                    return callback(null, true);
+                }
+
+                const normalizedOrigin = origin.replace(/\/+$/, '');
+
+                if (allowedOrigins.length === 0 || allowedOrigins.includes(normalizedOrigin)) {
+                    return callback(null, true);
+                }
+
+                return callback(new Error('Not allowed by CORS'));
+            },
+            methods: ['GET', 'POST'],
+            credentials: true,
         }
     })
 

@@ -46,6 +46,9 @@ Required environment variables:
 - `VITE_BASE_URL=https://<your-backend-domain>/api/v1`
 - Optional: `VITE_SOCKET_URL=https://<your-backend-domain>`
 
+Important:
+- Do not add a trailing slash to `VITE_BASE_URL` in Render/Vercel settings.
+
 If `VITE_SOCKET_URL` is not set, the app derives socket URL from `VITE_BASE_URL` automatically.
 
 ## 3) Post-Deployment Checks
@@ -65,6 +68,7 @@ If `VITE_SOCKET_URL` is not set, the app derives socket URL from `VITE_BASE_URL`
 
 - CORS error:
   - Add frontend origin to `CLIENT_URL` on backend.
+  - Ensure requests target `/api/v1/...` endpoints and not backend root paths.
 
 - Socket not connecting:
   - Ensure backend is on Render/Railway (not serverless-only runtime).
