@@ -1,7 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import apiError from '../../../Backend/utils/apiError'
 import { buildApiUrl } from '../utils/apiConfig'
 
 
@@ -15,7 +14,7 @@ const UserLogout = async() => {
 
 
    } catch (error) {
-    throw new apiError(400,'Logout Failed:',error)
+    console.error('Logout Failed:', error?.response?.data?.message || error.message)
    }
 
     return (

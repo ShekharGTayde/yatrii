@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { UserContextData } from '../Context/UserContext'
 import axios from 'axios'
-import apiError from '../../../Backend/utils/apiError'
 import { buildApiUrl } from '../utils/apiConfig'
 
 const UserLogin = () => {
@@ -39,7 +38,8 @@ const UserLogin = () => {
     setEmail('')
     setPassword('')
   } catch (error) {
-   throw new apiError(400,'Loggin Failed:',error)    
+   console.error('Login Failed:', error?.response?.data?.message || error.message)
+   alert(error?.response?.data?.message || 'Login failed. Please try again.')
   }
 }
 
