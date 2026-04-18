@@ -5,7 +5,10 @@ import {Link} from 'react-router-dom'
 const Start = () => {
   return (
     <div>
-    <div className='bg-cover bg-[url(./bg.png)] w-full h-screen bg-red-400 flex flex-col justify-between  '>
+    <div
+      className='bg-cover w-full h-screen bg-red-400 flex flex-col justify-between'
+      style={{ backgroundImage: "url('/bg.png')" }}
+    >
         <img className='w-40' src="./logo.png" alt="logo" />
         <div className='bg-white p-5 '>
             <h2 className='font-bold text-2xl'>Get Started with Uber</h2> 

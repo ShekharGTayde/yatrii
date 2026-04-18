@@ -6,9 +6,26 @@ import Captain from './models/captain.model.js'
 let io;
 
 function IniatiazedSocket(server) {
+    const normalizeOrigin = (value = '') => {
+        const cleaned = String(value).trim().replace(/^['\"]|['\"]$/g, '').replace(/\/+$/, '');
+        if (!cleaned) {
+            return '';
+        }
+
+        try {
+            return new URL(cleaned).origin;
+        } catch {
+            try {
+                return new URL(`https://${cleaned}`).origin;
+            } catch {
+                return cleaned;
+            }
+        }
+    };
+
     const allowedOrigins = (process.env.CLIENT_URL || '')
         .split(',')
-        .map((origin) => origin.trim().replace(/\/+$/, ''))
+        .map((origin) => normalizeOrigin(origin))
         .filter(Boolean);
 
     io = new socketIo(server, {
@@ -18,11 +35,13 @@ function IniatiazedSocket(server) {
                     return callback(null, true);
                 }
 
-                const normalizedOrigin = origin.replace(/\/+$/, '');
+                const normalizedOrigin = normalizeOrigin(origin);
 
                 if (allowedOrigins.length === 0 || allowedOrigins.includes(normalizedOrigin)) {
                     return callback(null, true);
                 }
+
+                console.warn(`Socket.IO CORS blocked origin: ${origin}. Allowed origins: ${allowedOrigins.join(', ')}`);
 
                 return callback(new Error('Not allowed by CORS'));
             },

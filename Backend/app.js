@@ -11,9 +11,26 @@ import Order from './models/order.model.js';
 
 const app = express()
 
+const normalizeOrigin = (value = '') => {
+  const cleaned = String(value).trim().replace(/^['\"]|['\"]$/g, '').replace(/\/+$/, '');
+  if (!cleaned) {
+    return '';
+  }
+
+  try {
+    return new URL(cleaned).origin;
+  } catch {
+    try {
+      return new URL(`https://${cleaned}`).origin;
+    } catch {
+      return cleaned;
+    }
+  }
+};
+
 const allowedOrigins = (process.env.CLIENT_URL || '')
   .split(',')
-  .map((origin) => origin.trim().replace(/\/+$/, ''))
+  .map((origin) => normalizeOrigin(origin))
   .filter(Boolean);
 
 const corsOptions = {
@@ -23,11 +40,13 @@ const corsOptions = {
       return callback(null, true);
     }
 
-    const normalizedOrigin = origin.replace(/\/+$/, '');
+    const normalizedOrigin = normalizeOrigin(origin);
 
     if (allowedOrigins.length === 0 || allowedOrigins.includes(normalizedOrigin)) {
       return callback(null, true);
     }
+
+    console.warn(`CORS blocked origin: ${origin}. Allowed origins: ${allowedOrigins.join(', ')}`);
 
     return callback(new Error('Not allowed by CORS'));
   },
