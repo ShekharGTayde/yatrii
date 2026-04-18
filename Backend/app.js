@@ -28,7 +28,7 @@ const normalizeOrigin = (value = '') => {
   }
 };
 
-const allowedOrigins = (process.env.CLIENT_URL || '')
+const allowedOrigins = (process.env.CLIENT_URL || '*')
   .split(',')
   .map((origin) => normalizeOrigin(origin))
   .filter(Boolean);
